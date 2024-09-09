@@ -1,1 +1,27 @@
+//this file documents the general outline of the entire project
 
+Crafting_Scholars_SAT/
+│
+├── src/
+│   ├── main.py               # Your main application script
+│   ├── question_bank.py      # Module for managing questions
+│   └── ui/
+│       ├── main_window.py    # Main application window
+│       └── question_dialog.py # Dialog for adding new questions
+│
+├── data/
+│   └── questions.json        # Store questions in a JSON file
+│
+├── tests/
+│   ├── test_question_bank.py
+│   └── test_ui.py
+│
+├── resources/
+│   ├── images/
+│   └── styles/
+│
+├── docs/
+│   └── user_manual.md
+│
+├── requirements.txt          # List of Python package dependencies
+└── README.md                 # Project description and setup instructions
