@@ -1,0 +1,59 @@
+import random
+
+class SATPrep:
+    def __init__(self):
+        self.questions = {}
+
+    def add_question(self, question, answer):
+        self.questions[question] = answer
+
+    def get_random_question(self):
+        if not self.questions:
+            return "No questions available."
+        question = random.choice(list(self.questions.keys()))
+        return question
+
+    def check_answer(self, question, user_answer):
+        correct_answer = self.questions.get(question)
+        if correct_answer is None:
+            return "Question not found."
+        return user_answer.lower() == correct_answer.lower()
+
+def main():
+    sat_prep = SATPrep()
+
+    # Adding sample questions
+    sat_prep.add_question("What is the capital of France?", "Paris")
+    sat_prep.add_question("What is 2 + 2?", "4")
+    sat_prep.add_question("Who wrote 'Romeo and Juliet'?", "William Shakespeare")
+
+    while True:
+        print("\n1. Add a question")
+        print("2. Practice")
+        print("3. Quit")
+        choice = input("Enter your choice (1/2/3): ")
+
+        if choice == '1':
+            question = input("Enter the question: ")
+            answer = input("Enter the answer: ")
+            sat_prep.add_question(question, answer)
+            print("Question added successfully!")
+
+        elif choice == '2':
+            question = sat_prep.get_random_question()
+            print(f"\nQuestion: {question}")
+            user_answer = input("Your answer: ")
+            if sat_prep.check_answer(question, user_answer):
+                print("Correct!")
+            else:
+                print(f"Incorrect. The correct answer is: {sat_prep.questions[question]}")
+
+        elif choice == '3':
+            print("Thank you for using the SAT Prep Program. Goodbye!")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
