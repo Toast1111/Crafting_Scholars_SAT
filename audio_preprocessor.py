@@ -2,13 +2,16 @@ import librosa
 import numpy as np
 import json
 import os
+import base64
+from io import BytesIO
 
-def preprocess_audio(audio_file):
-    # Load the audio file
-    y, sr = librosa.load(audio_file)
+def preprocess_audio(audio_data, file_name):
+    # Load the audio file from the binary data
+    audio_buffer = BytesIO(audio_data)
+    y, sr = librosa.load(audio_buffer)
     
     # Get the file name without extension
-    file_name = os.path.splitext(os.path.basename(audio_file))[0]
+    file_name = os.path.splitext(file_name)[0]
     
     # Detect beat frames
     tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
@@ -38,17 +41,32 @@ def preprocess_audio(audio_file):
         'frequencies': list(zip(downsampled_times.tolist(), downsampled_freq.tolist()))
     }
     
-    # Save the rhythm data to a JSON file
-    output_file = f"{file_name}_rhythm_data.json"
-    with open(output_file, 'w') as f:
-        json.dump(rhythm_data, f)
+    # Convert rhythm data to JSON
+    json_data = json.dumps(rhythm_data)
     
-    print(f"Rhythm data saved to {output_file}")
+    print(f"Rhythm data processed for {file_name}")
     print(f"Beats: {len(rhythm_data['beats'])}")
     print(f"Onsets: {len(rhythm_data['onsets'])}")
     print(f"Frequency data points: {len(rhythm_data['frequencies'])}")
+    
+    return json_data
 
-# Example usage
+# This function will be called from the main script
+def process_audio_file(file_content, file_name):
+    try:
+        # Decode base64 content
+        audio_data = base64.b64decode(file_content)
+        
+        # Process the audio data
+        json_data = preprocess_audio(audio_data, file_name)
+        
+        return json_data
+    except Exception as e:
+        return str(e)
+
+# Example usage (this part will be in a separate script)
 if __name__ == "__main__":
-    audio_file = "path_to_your_audio_file.mp3"
-    preprocess_audio(audio_file)
+    # This is just a placeholder. In the actual use, you'll call process_audio_file()
+    # from another script that handles file uploads.
+    print("This script is designed to be imported and used by another script.")
+    print("Please run the main script that handles file uploads and processing.")
